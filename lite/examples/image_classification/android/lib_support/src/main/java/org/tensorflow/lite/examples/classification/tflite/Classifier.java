@@ -55,9 +55,12 @@ public abstract class Classifier {
   public enum Model {
     FLOAT_MOBILENET,
     QUANTIZED_MOBILENET,
+    QUANTIZED_MOBILENETV2,
     FLOAT_EFFICIENTNET,
     QUANTIZED_EFFICIENTNET,
-    INCEPTION
+    QUANTIZED_INCEPTIONV2,
+    FLOAT_LOBE,
+    QUANTIZED_LOBE
   }
 
   /** The runtime device type used for executing classification. */
@@ -121,9 +124,15 @@ public abstract class Classifier {
       return new ClassifierFloatEfficientNet(activity, device, numThreads);
     } else if (model == Model.QUANTIZED_EFFICIENTNET) {
       return new ClassifierQuantizedEfficientNet(activity, device, numThreads);
-    } else if (model == Model.INCEPTION){
-      return new ClassifierInceptionNet(activity, device, numThreads);
-    } else {
+    }else if (model == Model.FLOAT_LOBE) {
+      return new ClassifierLobe(activity, device, numThreads);
+    }else if (model == Model.QUANTIZED_LOBE) {
+      return new ClassifierQuantizedLobe(activity, device, numThreads);
+    } else if (model == Model.QUANTIZED_INCEPTIONV2) {
+      return new ClassifierInceptionV2(activity, device, numThreads);
+    } else if (model == Model.QUANTIZED_MOBILENETV2) {
+      return new ClassifierQuantizedMobileNetV2(activity, device, numThreads);
+    }  else {
       throw new UnsupportedOperationException();
     }
   }
@@ -211,7 +220,7 @@ public abstract class Classifier {
         tfliteOptions.addDelegate(gpuDelegate);
         break;
       case CPU:
-        tfliteOptions.setUseXNNPACK(true);
+        //tfliteOptions.setUseXNNPACK(true);
         break;
     }
     tfliteOptions.setNumThreads(numThreads);
@@ -306,7 +315,7 @@ public abstract class Classifier {
 
     // Creates processor for the TensorImage.
     int cropSize = min(bitmap.getWidth(), bitmap.getHeight());
-    int numRotation = sensorOrientation / 90;
+    int numRotation =-(sensorOrientation / 90);
     // TODO(b/143564309): Fuse ops inside ImageProcessor.
     ImageProcessor imageProcessor =
         new ImageProcessor.Builder()

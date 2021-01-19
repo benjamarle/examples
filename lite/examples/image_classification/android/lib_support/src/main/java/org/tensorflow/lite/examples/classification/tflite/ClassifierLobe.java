@@ -1,4 +1,4 @@
-/* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
+/* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,29 +19,31 @@ import android.app.Activity;
 
 import org.tensorflow.lite.support.common.TensorOperator;
 import org.tensorflow.lite.support.common.ops.NormalizeOp;
-
 import java.io.IOException;
+import org.tensorflow.lite.examples.classification.tflite.Classifier.Device;
 
-/** This TensorFlowLite classifier works with the float EfficientNet model. */
-public class ClassifierInceptionNet extends Classifier {
-
-  private static final float IMAGE_MEAN = 127.0f;
-  private static final float IMAGE_STD = 128.0f;
+/** This TensorFlow Lite classifier works with the quantized MobileNet model. */
+public class ClassifierLobe extends Classifier {
 
   /**
-   * Float model does not need dequantization in the post-processing. Setting mean and std as 0.0f
-   * and 1.0f, repectively, to bypass the normalization.
+   * The quantized model does not require normalization, thus set mean as 0.0f, and std as 1.0f to
+   * bypass the normalization.
    */
+  private static final float IMAGE_MEAN = 127.5f;
+
+  private static final float IMAGE_STD = 127.5f;
+
+  /** Quantized MobileNet requires additional dequantization to the output probability. */
   private static final float PROBABILITY_MEAN = 0.0f;
 
   private static final float PROBABILITY_STD = 1.0f;
 
   /**
-   * Initializes a {@code ClassifierFloatMobileNet}.
+   * Initializes a {@code ClassifierQuantizedMobileNet}.
    *
    * @param activity
    */
-  public ClassifierInceptionNet(Activity activity, Device device, int numThreads)
+  public ClassifierLobe(Activity activity, Device device, int numThreads)
       throws IOException {
     super(activity, device, numThreads);
   }
@@ -51,12 +53,12 @@ public class ClassifierInceptionNet extends Classifier {
     // you can download this file from
     // see build.gradle for where to obtain this file. It should be auto
     // downloaded into assets.
-    return "inception_v2_224_quant.tflite";
+    return "saved_model.tflite";
   }
 
   @Override
   protected String getLabelPath() {
-    return "labels.txt";
+    return "labelsLobe.txt";
   }
 
   @Override

@@ -16,13 +16,14 @@ limitations under the License.
 package org.tensorflow.lite.examples.classification.tflite;
 
 import android.app.Activity;
-import java.io.IOException;
-import org.tensorflow.lite.examples.classification.tflite.Classifier.Device;
+
 import org.tensorflow.lite.support.common.TensorOperator;
 import org.tensorflow.lite.support.common.ops.NormalizeOp;
 
+import java.io.IOException;
+
 /** This TensorFlow Lite classifier works with the quantized MobileNet model. */
-public class ClassifierQuantizedMobileNet extends Classifier {
+public class ClassifierQuantizedLobe extends Classifier {
 
   /**
    * The quantized model does not require normalization, thus set mean as 0.0f, and std as 1.0f to
@@ -42,7 +43,7 @@ public class ClassifierQuantizedMobileNet extends Classifier {
    *
    * @param activity
    */
-  public ClassifierQuantizedMobileNet(Activity activity, Device device, int numThreads)
+  public ClassifierQuantizedLobe(Activity activity, Device device, int numThreads)
       throws IOException {
     super(activity, device, numThreads);
   }
@@ -52,12 +53,12 @@ public class ClassifierQuantizedMobileNet extends Classifier {
     // you can download this file from
     // see build.gradle for where to obtain this file. It should be auto
     // downloaded into assets.
-    return "mobilenet_v1_1.0_224_quantized_1_default_1.tflite";
+    return "quantified.tflite";
   }
 
   @Override
   protected String getLabelPath() {
-    return "labels.txt";
+    return "labelsLobe.txt";
   }
 
   @Override

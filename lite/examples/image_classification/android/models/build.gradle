@@ -32,6 +32,14 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
+    buildFeatures {
+        mlModelBinding true
+    }
+}
+
+dependencies {
+    implementation 'org.tensorflow:tensorflow-lite-support:0.1.0-rc1'
+    implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0-rc1'
 }
 
 // Download default models; if you wish to use your own models then
